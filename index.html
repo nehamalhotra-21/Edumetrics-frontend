@@ -1,0 +1,264 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>EduMetrics – Advisor Dashboard</title>
+  <link href="https://fonts.googleapis.com/css2?family=Sora:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+
+<div class="shell">
+
+  <!-- ── SIDEBAR ── -->
+  <aside class="sidebar">
+    <div class="logo">
+      <div class="logo-dot"></div>
+      EduMetrics
+    </div>
+    <div class="nav-item active"><span class="nav-icon">📊</span> Dashboard</div>
+    <div class="nav-item"><span class="nav-icon">👥</span> All Students</div>
+    <div class="nav-item"><span class="nav-icon">🚩</span> Flagged</div>
+    <div class="nav-item"><span class="nav-icon">📈</span> Analytics</div>
+    <div class="nav-item"><span class="nav-icon">📋</span> Reports</div>
+    <div class="nav-item"><span class="nav-icon">⚙️</span> Settings</div>
+    <div class="sidebar-spacer"></div>
+    <div class="sidebar-user">
+      <div class="avatar-sm">DR</div>
+      <div class="sidebar-user-info">
+        <p>Dr. Ramesh</p>
+        <span>Class Advisor</span>
+      </div>
+    </div>
+  </aside>
+
+  <!-- ── MAIN ── -->
+  <div class="main">
+
+    <!-- TOPBAR -->
+    <div class="topbar">
+      <div class="topbar-left">
+        <div class="page-title">Advisor Dashboard</div>
+        <div class="week-selector">
+          <button>‹</button>
+          📅 Oct 14–20, 2024
+          <button>›</button>
+        </div>
+      </div>
+      <div class="topbar-right">
+        <button class="btn-ghost">📤 Export</button>
+        <button class="btn-primary">+ Log Intervention</button>
+      </div>
+    </div>
+
+    <!-- CONTENT -->
+    <div class="content">
+
+      <!-- ── FLAGGED STUDENTS ── -->
+      <section class="animate d1">
+        <div class="section-header">
+          <div>
+            <div class="section-title">Flagged Students (This Week)</div>
+          </div>
+          <span class="badge badge-danger">⚠ 4 At Risk</span>
+        </div>
+        <div class="flagged-grid">
+
+          <div class="student-card high-risk animate d1" onclick="openModal('alex')">
+            <div class="student-card-top">
+              <div class="avatar av-red">AJ</div>
+              <div class="student-info">
+                <div class="name">Alex J.</div>
+                <span class="risk-tag risk-high">High Risk</span>
+              </div>
+            </div>
+            <div class="reason">📉 Drop in Attendance over 3 weeks</div>
+            <button class="btn-details">View Details →</button>
+          </div>
+
+          <div class="student-card at-risk animate d2" onclick="openModal('ben')">
+            <div class="student-card-top">
+              <div class="avatar av-orange">BK</div>
+              <div class="student-info">
+                <div class="name">Ben K.</div>
+                <span class="risk-tag risk-warn">At-Risk</span>
+              </div>
+            </div>
+            <div class="reason">📝 Late Projects (3 consecutive)</div>
+            <button class="btn-details">View Details →</button>
+          </div>
+
+          <div class="student-card at-risk animate d3" onclick="openModal('charlie')">
+            <div class="student-card-top">
+              <div class="avatar av-purple">CL</div>
+              <div class="student-info">
+                <div class="name">Charlie L.</div>
+                <span class="risk-tag risk-warn">At-Risk</span>
+              </div>
+            </div>
+            <div class="reason">📉 Drop in Attendance (2 weeks)</div>
+            <button class="btn-details">View Details →</button>
+          </div>
+
+          <div class="student-card at-risk animate d4" onclick="openModal('david')">
+            <div class="student-card-top">
+              <div class="avatar av-teal">DM</div>
+              <div class="student-info">
+                <div class="name">David M.</div>
+                <span class="risk-tag risk-warn">At-Risk</span>
+              </div>
+            </div>
+            <div class="reason">📝 Late Projects (2 consecutive)</div>
+            <button class="btn-details">View Details →</button>
+          </div>
+
+        </div>
+      </section>
+
+      <!-- ── CLASS HEATMAP ── -->
+      <section class="animate d2">
+        <div class="heatmap-card">
+          <div class="section-header" style="margin-bottom:0">
+            <div>
+              <div class="section-title">Your Class This Week</div>
+              <div class="heatmap-subtitle">Weekly performance score by student — hover a cell to inspect</div>
+            </div>
+            <span class="badge badge-info">📅 Oct 14-20</span>
+          </div>
+          <div id="heatmap-root" style="margin-top:16px"></div>
+          <div class="heatmap-legend">
+            <span>Good</span>
+            <div class="legend-swatch" style="background:var(--cool3)"></div>
+            <div class="legend-swatch" style="background:var(--cool2)"></div>
+            <div class="legend-swatch" style="background:var(--surface2)"></div>
+            <div class="legend-swatch" style="background:var(--heat2)"></div>
+            <div class="legend-swatch" style="background:var(--heat4)"></div>
+            <span>At Risk</span>
+          </div>
+        </div>
+      </section>
+
+      <!-- ── SCATTER + PERFORMANCE GRID ── -->
+      <div class="two-col animate d3">
+
+        <!-- Scatter -->
+        <div class="card">
+          <div class="section-header">
+            <div class="section-title">Detainment Risk Analysis</div>
+            <div class="tab-toggle">
+              <button class="tab-btn active" onclick="switchTab(this,'mid')">Mid Sem</button>
+              <button class="tab-btn" onclick="switchTab(this,'end')">End Sem</button>
+            </div>
+          </div>
+          <div class="scatter-wrap">
+            <canvas class="scatter-canvas" id="scatterCanvas" width="260" height="200"></canvas>
+          </div>
+          <div style="font-size:.7rem;color:var(--muted);margin-top:8px;text-align:center">
+            Safety: distance from detainment threshold line
+          </div>
+        </div>
+
+        <!-- Performance grid -->
+        <div class="card">
+          <div class="section-header">
+            <div class="section-title">Last Week's Flagged Students — Predicted vs Actual</div>
+          </div>
+          <div class="perf-grid" id="perfGrid"></div>
+        </div>
+
+      </div>
+
+      <!-- ── POST MID-SEM ── -->
+      <section class="animate d4">
+        <div class="card">
+          <div class="section-title" style="margin-bottom:16px">Post Mid-Sem Comparison &amp; Analysis</div>
+          <div class="post-midsem-grid">
+
+            <!-- Bar chart comparison -->
+            <div>
+              <div style="font-size:.78rem;font-weight:600;color:var(--muted);margin-bottom:10px">
+                Mid-Sem Performance / Comparison &amp; Divergence Analysis
+              </div>
+              <div style="display:flex;gap:12px;margin-bottom:8px">
+                <span style="font-size:.7rem;display:flex;align-items:center;gap:5px">
+                  <span style="display:inline-block;width:10px;height:10px;background:var(--accent);border-radius:2px"></span>Predicted
+                </span>
+                <span style="font-size:.7rem;display:flex;align-items:center;gap:5px">
+                  <span style="display:inline-block;width:10px;height:10px;background:var(--accent2);border-radius:2px"></span>Actual
+                </span>
+              </div>
+              <canvas id="barChart" width="300" height="140"></canvas>
+            </div>
+
+            <!-- Divergence table -->
+            <div>
+              <div style="font-size:.78rem;font-weight:600;color:var(--muted);margin-bottom:10px">
+                System Prediction Divergence (Students hugely wrong about)
+              </div>
+              <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:8px">
+                <span style="font-size:.7rem;color:var(--muted)">Sort by: Predicted Score ↕</span>
+                <label style="display:flex;align-items:center;gap:5px;font-size:.72rem;cursor:pointer">
+                  <input type="checkbox" id="filterHighlight" onchange="filterTable()"> Highlight only
+                </label>
+              </div>
+              <table class="divergence-table" id="divTable">
+                <thead>
+                  <tr>
+                    <th>Student</th><th>Predicted</th><th>Actual</th><th>Δ Diff</th><th>Status</th>
+                  </tr>
+                </thead>
+                <tbody id="divTableBody"></tbody>
+              </table>
+            </div>
+
+          </div>
+
+          <!-- Individual weekly plots -->
+          <div style="font-size:.78rem;font-weight:600;color:var(--muted);margin-top:20px;margin-bottom:2px">
+            Individual Student Weekly Performance — Full Semester (GitHub-style contribution plot)
+          </div>
+          <div class="individual-plots" id="indivPlots"></div>
+
+          <!-- Footer buttons -->
+          <div class="footer-btns" style="margin-top:20px">
+            <button class="btn-report btn-report-primary">📄 Generate Report for HOD</button>
+            <button class="btn-report btn-report-secondary">📊 Generate Semester Report</button>
+          </div>
+
+        </div>
+      </section>
+
+    </div><!-- /content -->
+  </div><!-- /main -->
+</div><!-- /shell -->
+
+<!-- ── STUDENT DETAIL MODAL ── -->
+<div class="modal-overlay" id="modal">
+  <div class="modal">
+    <div class="modal-header">
+      <div class="modal-title" id="modalTitle">Alex Johnson – Full Report</div>
+      <div class="modal-close" onclick="closeModal()">✕</div>
+    </div>
+    <div class="modal-body">
+      <div style="font-size:.8rem;font-weight:600;color:var(--muted);margin-bottom:10px">Scores on Different Indices</div>
+      <table class="modal-table" id="modalTable"></table>
+      <div class="flagging-box">
+        <p id="flagReason">⚠ 75% Drop in Attendance over 3 weeks</p>
+      </div>
+      <div style="font-size:.8rem;font-weight:600;margin-bottom:8px">Prediction for Next Week</div>
+      <div class="prediction-row">
+        <div class="score-big" id="predScore">62</div>
+        <div class="score-delta" id="predDelta">▼ -25%</div>
+      </div>
+      <div class="weekly-perf-title">Weekly Performance</div>
+      <canvas class="mini-line-chart" id="modalLineChart" height="80"></canvas>
+    </div>
+  </div>
+</div>
+
+<div id="global-tooltip"></div>
+
+<script src="script.js"></script>
+</body>
+</html>
